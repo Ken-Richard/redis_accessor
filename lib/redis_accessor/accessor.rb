@@ -22,7 +22,8 @@ module RedisAccessor
 			module_id.downcase!
 			version = get_version(module_id)
 			hash = JSON.parse(@redis.hget("aes:module:#{module_id}:#{version}", module_id))
-			Mod.new(hash)
+			questions = get_questions(module_id, version)
+			Mod.new(hash, questions)
 		end
 
 		def get_unit(unit_id, module_id)
@@ -30,20 +31,24 @@ module RedisAccessor
 			module_id.downcase!
 			version = get_version(module_id)
 			hash = JSON.parse(@redis.hget("aes:unit:#{module_id}:#{version}", "#{unit_id}"))
-			Unit.new(hash)
-		end
-
-		# TODO - questions arent in Redis
-		def get_test_questions(module_id)
-			module_id.downcase!
-			version = get_version(module_id)
-			@redis.llen("aes:#{module_id}:#{version}:questions")
+			questions = get_questions(module_id, version)
+			Unit.new(hash, questions, unit_id)
 		end
 
 		def get_version(module_id)
 			@redis.llen("aes:module:#{module_id}:versions")
 		end
 
-		private :get_version
+		# Returns array of [unit_id => question hash]
+		def get_questions(module_id, version)
+			formatted_questions = []
+			questions = @redis.lrange("aes:unit:#{module_id}:#{version}:questions", "0", "-1")
+			questions.each do |question_string|
+				formatted_questions << JSON.parse(question_string)
+			end
+			formatted_questions
+		end
+
+		private :get_version, :get_questions
 	end
 end

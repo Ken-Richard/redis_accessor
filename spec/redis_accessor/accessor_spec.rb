@@ -12,6 +12,4 @@ describe RedisAccessor::Accessor do
 	it "returns Unit object" do
 		expect($access.get_unit("maadmisco01", "maadmisco").class).to eq(RedisAccessor::Unit)
 	end
-
-	it "returns a list of test questions"
 end

@@ -15,4 +15,10 @@ describe RedisAccessor::Mod do
 		expect(units[0].class).to eq(Hash)
 		expect(units.count).to eq(4)
 	end
+
+	it "gets array of test question hashes" do
+		test_questions = @mod.get_test_questions
+		expect(test_questions.size).to eq(20)
+		expect(test_questions[0]["Purpose"]).to eq("Test")
+	end
 end
