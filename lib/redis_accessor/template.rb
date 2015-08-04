@@ -1,19 +1,23 @@
+require_relative 'accessor'
+
 module RedisAccessor
-	class Template
-		def initialize(hash)
-			@info = hash
-		end
+  class Template
+    def initialize(hash, accessor)
+      @info = hash
+      @accessor = accessor
+    end
 
-		def modules_as_hashes
-			@info["MODULES"]
-		end
+    def get_modules
+      modules = []
+      @info["MODULES"].each do |mod|
+          module_id = mod["Module Key"].downcase
+          modules << @accessor.get_module(module_id)
+      end
+      modules
+    end
 
-		# TODO: Return an array of module object models
-		def modules_as_models
-		end
-
-		def to_s
-			@info.to_s
-		end
-	end
+    def to_h
+      @info
+    end
+  end
 end

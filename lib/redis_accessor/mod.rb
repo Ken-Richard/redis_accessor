@@ -1,29 +1,53 @@
+require_relative 'teacher_resources'
+
 module RedisAccessor
-	class Mod
-		def initialize(hash, questions)
-			@info = hash
-			@questions = questions
-		end
+  class Mod
+    def initialize(hash, questions, module_id, accessor)
+      @info = hash
+      @questions = questions
+      @module_id = module_id
+      @accessor = accessor
+    end
 
-		def units_as_hashes
-			@info["UNITS"]
-		end
+    def get_units
+      units = []
+      @info["UNITS"].each do |unit|
+        unit_id = unit["Unit Key"].downcase
+        units << @accessor.get_unit(unit_id, @module_id)
+      end
+      units
+    end
 
-		# TODO: Return an array of unit object models
-		def units_as_models
-		end
+    def get_test_questions
+      test_questions = []
+      @questions.each do |question|
+        test_questions << question.values[0] if is_test?(question)
+      end
+      test_questions
+    end
 
-		# Returns an array of question Hashes
-		def get_test_questions
-			test_questions = []
-			@questions.each do |question|
-				test_questions << question.values[0] if question.values[0]["Purpose"] == "Test"
-			end
-			test_questions
-		end
+    # TODO return teacher_resource object
+    def get_teacher_resources
+      resources = []
+      return nil if !@info["RESOURCES"]
+      if @info["RESOURCES"].is_a? Array
+        @info["RESOURCES"].each do |resource|
+          resources << TeacherResources.new(resource)
+        end
+      else
+        resources << TeacherResources.new(@info["RESOURCES"])
+      end
+      resources
+    end
 
-		def to_s
-			@info.to_s
-		end
-	end
+    def to_h
+      @info.to_h
+    end
+
+    def is_test?(question)
+      question.values[0]["Purpose"] == "Test"
+    end
+
+    private :is_test?
+  end
 end

@@ -8,6 +8,6 @@ require 'redis_accessor/accessor.rb'
 
 # MODULE_ID = "maadmisco"
 if !$access
-	redis = Redis.new
-	$access = RedisAccessor::Accessor.new(redis)
+  redis = Redis.new
+  $access = RedisAccessor::Accessor.new(redis)
 end
