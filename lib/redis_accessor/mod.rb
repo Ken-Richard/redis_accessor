@@ -26,7 +26,6 @@ module RedisAccessor
       test_questions
     end
 
-    # TODO return teacher_resource object
     def get_teacher_resources
       resources = []
       return nil if !@info["RESOURCES"]
