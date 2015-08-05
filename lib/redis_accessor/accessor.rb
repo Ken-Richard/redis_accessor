@@ -24,7 +24,14 @@ module RedisAccessor
       validate(version)
       hash = JSON.parse(@redis.hget("aes:module:#{module_id}:#{version}", module_id))
       questions = get_questions(module_id, version)
-      Mod.new(hash, questions, module_id, self)
+      params = {
+        info: hash,
+        questions: questions,
+        module_id: module_id,
+        accessor: self,
+        version: version
+      }
+      Mod.new(params)
     end
 
     def get_unit(unit_id, module_id)
@@ -34,9 +41,18 @@ module RedisAccessor
       validate(version)
       hash = JSON.parse(@redis.hget("aes:unit:#{module_id}:#{version}", "#{unit_id}"))
       questions = get_questions(module_id, version)
-      Unit.new(hash, questions, unit_id, self)
+      params = {
+        info: hash,
+        questions: questions,
+        unit_id: unit_id,
+        redis: @redis,
+        module_id: module_id,
+        version: version
+      }
+      Unit.new(params)
     end
 
+  private
     def get_version(module_id)
       @redis.llen("aes:module:#{module_id}:versions")
     end
@@ -54,7 +70,5 @@ module RedisAccessor
     def validate(version)
       raise Exception, "Redis hash does not exist" if version == 0
     end
-
-    private :get_version, :get_questions, :validate
   end
 end

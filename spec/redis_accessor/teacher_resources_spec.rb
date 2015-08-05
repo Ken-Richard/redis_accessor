@@ -14,6 +14,8 @@ describe RedisAccessor::TeacherResources do
     expect(@resource.title).to eq("Lesson Plans")
   end
 
-  it "has a path with resolved variable"
-  it "can open the path"
+  it "has a resource path with resolved variable" do
+    expect(@resource.path).to eq("I:\\_BC21 Online Resources\\BCLAW-Business Law\\BCLawLaw-Business Law\\BC LAW 3_Business Law.pdf")
+  end
+
 end

@@ -6,11 +6,11 @@ describe RedisAccessor::Accessor do
   end
 
   it "returns Mod object" do
-    expect($access.get_module("MAadMISCO").class).to eq(RedisAccessor::Mod)
+    expect($access.get_module("bclaw").class).to eq(RedisAccessor::Mod)
   end
 
   it "returns Unit object" do
-    expect($access.get_unit("maadmisco01", "maadmisco").class).to eq(RedisAccessor::Unit)
+    expect($access.get_unit("bclawlaw", "bclaw").class).to eq(RedisAccessor::Unit)
   end
 
   it "raises an exception if the redis hash doesn't exist" do

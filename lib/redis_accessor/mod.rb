@@ -2,11 +2,12 @@ require_relative 'teacher_resources'
 
 module RedisAccessor
   class Mod
-    def initialize(hash, questions, module_id, accessor)
-      @info = hash
-      @questions = questions
-      @module_id = module_id
-      @accessor = accessor
+    def initialize(params)
+      @info = params[:info]
+      @questions = params[:questions]
+      @module_id = params[:module_id]
+      @accessor = params[:accessor]
+      @version = params[:version]
     end
 
     def get_units
@@ -29,13 +30,11 @@ module RedisAccessor
     def get_teacher_resources
       resources = []
       return nil if !@info["RESOURCES"]
-      if @info["RESOURCES"].is_a? Array
-        @info["RESOURCES"].each do |resource|
-          resources << TeacherResources.new(resource)
-        end
-      else
-        resources << TeacherResources.new(@info["RESOURCES"])
+      
+      @info["RESOURCES"].each do |resource|
+        resources << TeacherResources.new(resource, resource_params)
       end
+
       resources
     end
 
@@ -43,10 +42,17 @@ module RedisAccessor
       @info.to_h
     end
 
+  private
     def is_test?(question)
       question.values[0]["Purpose"] == "Test"
     end
 
-    private :is_test?
+    def resource_params
+      {
+        type: "module",
+        type_id: @info["KEY"],
+        version: @version
+      }
+    end
   end
 end
