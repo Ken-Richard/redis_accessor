@@ -21,9 +21,10 @@ module RedisAccessor
       @version = params[:version]
     end
 
-    def open_resource
+    def open_resource(launch = true)
       resource_url = get_resource_url(get_file(@path))
-      Launchy.open(resource_url)
+      Launchy.open(resource_url) if launch
+      resource_url
     end
 
   private

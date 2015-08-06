@@ -23,10 +23,11 @@ module RedisAccessor
       end
     end
 
-    def open_lesson
+    def open_lesson(launch = true)
       lesson_path_name = get_path_name
       lesson_url = get_story_url(lesson_path_name) 
-      Launchy.open(lesson_url)
+      Launchy.open(lesson_url) if launch
+      lesson_url
     end
 
     def to_s

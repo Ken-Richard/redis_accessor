@@ -18,8 +18,11 @@ describe RedisAccessor::Lesson do
     expect(objectives).to eq(["Define contracts and describe types of contracts"])
   end
 
-  #capybara?
   it "has a lesson url with a resolved variable" do
     expect(@lesson.lesson_path).to eq("V:\\BNIT Curriculum\\BI\\BC Business Law\\BC LAW 2-Business Law\\SCORM\\Contracts - Storyline output")
+  end
+
+  it "generates a S3 url for the lesson" do
+    expect(@lesson.open_lesson(false)).to eq("https://s3.amazonaws.com/colin-testing/units/BCLawLaw/1/media/Contracts+-+Storyline+output/story.html")
   end
 end
