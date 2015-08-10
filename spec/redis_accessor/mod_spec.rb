@@ -2,7 +2,7 @@ require 'redis_accessor/spec_helper'
 
 describe RedisAccessor::Mod do
   before do
-    @mod = $access.get_module("bclaw")
+    @mod = $access.get_module("Business Law")
   end
 
   it "to_h returns a hash" do
@@ -15,6 +15,10 @@ describe RedisAccessor::Mod do
     expect(units.class).to eq(Array)
     expect(units[0].class).to eq(RedisAccessor::Unit)
     expect(units.size).to eq(3)
+  end
+
+  it "has a title" do
+    expect(@mod.title).to eq("some title")
   end
 
   it "gets array of test question hashes" do

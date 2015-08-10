@@ -47,6 +47,10 @@ module RedisAccessor
       resources
     end
 
+    def title
+      @info["TITLE"]
+    end
+
     def to_h
       @info
     end

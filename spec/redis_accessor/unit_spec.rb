@@ -5,6 +5,10 @@ describe RedisAccessor::Unit do
     @unit = $access.get_unit("bclawlaw", "bclaw")
   end
 
+  it "has a title" do
+    expect(@unit.title).to eq("Business Law")
+  end
+
   it "gets an array of quiz question hashes" do
     questions = @unit.get_quiz_questions
 
