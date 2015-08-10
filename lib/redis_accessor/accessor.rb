@@ -21,7 +21,7 @@ module RedisAccessor
     def get_module(module_id)
       module_id.downcase!
       version = get_version(module_id)
-      validate(version)
+      validate(version, module_id)
       hash = JSON.parse(@redis.hget("aes:module:#{module_id}:#{version}", module_id))
       questions = get_questions(module_id, version)
       params = {
@@ -38,7 +38,7 @@ module RedisAccessor
       unit_id.downcase!
       module_id.downcase!
       version = get_version(module_id)
-      validate(version)
+      validate(version, unit_id)
       hash = JSON.parse(@redis.hget("aes:unit:#{module_id}:#{version}", "#{unit_id}"))
       questions = get_questions(module_id, version)
       params = {
@@ -67,8 +67,8 @@ module RedisAccessor
       formatted_questions
     end
 
-    def validate(version)
-      raise Exception, "Redis hash does not exist" if version == 0
+    def validate(version, type_id)
+      raise Exception, "#{type_id} does not exist in Redis" if version == 0
     end
   end
 end
